@@ -1,0 +1,27 @@
+#!/export/home/netbanx/base/usr/bin/perl
+
+use strict;
+use warnings;
+
+my $all = @ARGV ? 1 : 0;
+my @lines = `git log --log-size --no-merges`;
+my ( %sizes,$log_entry_bytes,$auth );
+
+foreach (@lines) {
+
+    if (/^log size/) {
+        $log_entry_bytes = ( split( / /,$_ ) )[2];
+    }
+    if ( /^Author:(.*?) </ ) {
+
+        $auth = $1;
+        $sizes{$auth}{size} += $log_entry_bytes;
+        $sizes{$auth}{count}++;
+        $sizes{$auth}{mean} = $sizes{$auth}{size} / $sizes{$auth}{count};
+    }
+    last if !$all && /git-svn-id: /;
+}
+
+foreach ( sort { $sizes{$b}{mean} <=> $sizes{$a}{mean} } keys ( %sizes ) ) {
+    print "$_ " . int($sizes{$_}{mean}) . "\n";
+}
