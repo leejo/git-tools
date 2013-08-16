@@ -1,0 +1,16 @@
+#!/bin/bash
+
+show_git_timesheet () {
+
+    local base_dir=$1;
+
+    for repo in $(find $base_dir -type d -name .git 2>/dev/null); do
+        dir=${repo%.git}
+        repo=$(expr "$repo" : '.*/\(.*\)/')
+        cd $dir;
+        echo --- $repo ----;
+        git timesheet;
+    done;
+}
+
+show_git_timesheet '/Users/leejohnson/working/';
