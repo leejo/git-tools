@@ -1,7 +1,5 @@
 #!/bin/bash
 
-week=$1
-
 show_git_timesheet () {
 
     local base_dir=$1;
@@ -11,11 +9,7 @@ show_git_timesheet () {
         repo=$(expr "$repo" : '.*/\(.*\)/')
         cd $dir;
         echo --- $repo ----;
-        if [ "$week" == "week" ]; then
-            git timesheetweek;
-        else
-            git timesheet;
-        fi
+        git status --short
     done;
 }
 
