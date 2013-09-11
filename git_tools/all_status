@@ -9,7 +9,7 @@ show_git_timesheet () {
         repo=$(expr "$repo" : '.*/\(.*\)/')
         cd $dir;
         echo --- $repo ----;
-        git status --short
+        git status -sb
     done;
 }
 
