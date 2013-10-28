@@ -13,7 +13,8 @@ show_git_timesheet () {
         cd $dir;
         echo --- $repo ----;
         if [ "$week" == "week" ]; then
-            git timesheetweek
+			args=$(echo $args | sed 's/week//');
+            git timesheetweek $args
         else
             git timesheet $args
         fi
