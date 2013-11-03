@@ -3,23 +3,28 @@
 use strict;
 use warnings;
 
-my $all = @ARGV ? 1 : 0;
+my $commits = shift || 0;
 my @lines = `git log --log-size --no-merges`;
-my ( %sizes,$log_entry_bytes,$auth );
+my ( %sizes,$log_entry_bytes,$auth,$no_commits );
+
+$no_commits = 0;
 
 foreach (@lines) {
 
     if (/^log size/) {
+		$no_commits++;
         $log_entry_bytes = ( split( / /,$_ ) )[2];
     }
     if ( /^Author:(.*?) </ ) {
 
-        $auth = $1;
-        $sizes{$auth}{size} += $log_entry_bytes;
-        $sizes{$auth}{count}++;
-        $sizes{$auth}{mean} = $sizes{$auth}{size} / $sizes{$auth}{count};
+		foreach my $auth ( $1,">ALL" ) {
+			$sizes{$auth}{size} += $log_entry_bytes;
+			$sizes{$auth}{count}++;
+			$sizes{$auth}{mean} = $sizes{$auth}{size} / $sizes{$auth}{count};
+		}
     }
-    last if !$all && /git-svn-id: /;
+
+    last if ( $commits && $no_commits >= $commits );
 }
 
 foreach ( sort { $sizes{$b}{mean} <=> $sizes{$a}{mean} } keys ( %sizes ) ) {
