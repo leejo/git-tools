@@ -3,6 +3,7 @@
 show_git_timesheet () {
 
     local base_dir=$1;
+	local tidy=$2;
 
     for repo in $(find $base_dir -maxdepth 3 -type d -name .git 2>/dev/null | grep -v old_code); do
         dir=${repo%.git}
@@ -10,7 +11,11 @@ show_git_timesheet () {
         cd $dir;
         echo --- $repo ----;
         git status -sb
+		if [ "$tidy" == "tidy" ]; then
+			git-tidy-up
+		fi
     done;
 }
 
-show_git_timesheet '/Users/leejohnson/working/';
+tidy=$1
+show_git_timesheet '/Users/leejohnson/working/' $tidy;
