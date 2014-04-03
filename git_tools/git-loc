@@ -1,0 +1,14 @@
+#!/bin/bash
+
+git log --numstat --no-merges --pretty=format:%an | \
+	awk ' 
+		author == "" { author = $0; next } /^$/ { author = ""; next }
+		{ added[author] += $1; removed[author] += $2 }
+		END {
+			for (author in added) {
+				print author, "added", added[author], "removed", removed[author], "sum", added[author]-removed[author]
+			}
+		}' | \
+	awk '{print $NF,$0}' | \
+	sort -n | \
+	cut -f2- -d' '
