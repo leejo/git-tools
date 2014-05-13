@@ -9,8 +9,11 @@ show_git_timesheet () {
         dir=${repo%.git}
         repo=$(expr "$repo" : '.*/\(.*\)/')
         cd $dir;
-        echo --- $repo ----;
-        git status -sb
+		count=$(git status -sb | wc -l)
+		if [ "$count" -gt "1" ]; then
+			echo --- $repo ----;
+			git status -sb
+		fi
 		if [ "$tidy" == "tidy" ]; then
 			git-tidy-up
 		fi
