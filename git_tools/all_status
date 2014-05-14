@@ -10,7 +10,8 @@ show_git_timesheet () {
         repo=$(expr "$repo" : '.*/\(.*\)/')
         cd $dir;
 		count=$(git status -sb | wc -l)
-		if [ "$count" -gt "1" ]; then
+		ahead=$(git status -sb | head -n1 | grep ahead)
+		if [ "$count" -gt "1" -o "$ahead" != "" ]; then
 			echo --- $repo ----;
 			git status -sb
 		fi
