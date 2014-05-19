@@ -15,6 +15,9 @@ show_git_timesheet () {
         if [ "$week" == "week" ]; then
 			args=$(echo $args | sed 's/week//');
             git timesheetweek $args
+        elif [ "$week" == "we" ]; then
+			args=$(echo $args | sed 's/we//');
+            git timesheetwe $args
         else
             git timesheet $args
         fi
