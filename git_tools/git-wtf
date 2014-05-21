@@ -40,6 +40,7 @@ If [branch] is not specified, git-wtf will use the current branch. The possible
   -a, --all           show all branches across all remote repos, not just
                       those from origin
   -A, --all-commits   show all commits, not just the first 5
+  -B, --all-branches  show all branches, not just those matching match list in config
   -s, --short         don't show commits
   -k, --key           show key
   -r, --relations     show relation to features / integration branches
@@ -91,6 +92,7 @@ $long = ARGV.delete("--long") || ARGV.delete("-l")
 $short = ARGV.delete("--short") || ARGV.delete("-s")
 $all = ARGV.delete("--all") || ARGV.delete("-a")
 $all_commits = ARGV.delete("--all-commits") || ARGV.delete("-A")
+$all_branches = ARGV.delete("--all-branches" ) || ARGV.delete("-B")
 $dump_config = ARGV.delete("--dump-config")
 $key = ARGV.delete("--key") || ARGV.delete("-k")
 $show_relations = ARGV.delete("--relations") || ARGV.delete("-r")
@@ -207,9 +209,11 @@ def show_relations b, all_branches
     puts "\nFeature branches:" unless fbs.empty?
     fbs.each do |name, br|
       ignore = false
-      $config["ignore"].each do |pattern|
-        r = Regexp.new(pattern)
-        ignore = true if name =~ r
+      if ! $all_branches and $config["match"]
+        $config["match"].each do |pattern|
+          r = Regexp.new(pattern)
+          ignore = true if name !~ r
+      end
       end
       next if ignore
       next if $config["ignore"].member?(br[:local_branch]) || $config["ignore"].member?(br[:remote_branch])
