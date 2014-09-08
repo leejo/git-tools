@@ -1,5 +1,7 @@
 #!/bin/bash
 
+pull="$1";
+
 show_git_timesheet () {
 
     local base_dir=$1;
@@ -9,6 +11,9 @@ show_git_timesheet () {
         dir=${repo%.git}
         repo=$(expr "$repo" : '.*/\(.*\)/')
         cd $dir;
+		if [ "$pull" == "pull" ]; then
+			git pull
+		fi
 		count=$(git status -sb | wc -l)
 		ahead=$(git status -sb | head -n1 | grep ahead)
 		if [ "$count" -gt "1" -o "$ahead" != "" ]; then
