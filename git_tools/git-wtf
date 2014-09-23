@@ -41,7 +41,7 @@ If [branch] is not specified, git-wtf will use the current branch. The possible
                       those from origin
   -A, --all-commits   show all commits, not just the first 5
   -B, --all-branches  show all branches, not just those matching match list in config
-  -s, --short         don't show commits
+  -s, --short         don't show commits, but will show last commit date
   -k, --key           show key
   -r, --relations     show relation to features / integration branches
       --dump-config   print out current configuration and exit
@@ -140,6 +140,14 @@ def show_commits commits, prefix="    "
     max -= 1 if max == commits.size - 1 # never show "and 1 more"
     commits[0 ... max].each { |c| puts "#{prefix}#{c}" }
     puts grey("#{prefix}... and #{commits.size - max} more (use -A to see all).") if commits.size > max
+  end
+end
+
+def recent_commit commits, head
+  if commits.empty?
+    return "#{prefix} none"
+  else
+    return `git log --pretty=format:"%cd" --date=short -1 #{head}`
   end
 end
 
@@ -242,8 +250,14 @@ def show_relations b, all_branches
       else
         behind = commits_between head, (br[:local_branch] || br[:remote_branch])
         ahead = remote_only ? remote_ahead : local_ahead
-        puts "#{widget false, remote_only, local_only} #{name} #{local_only ? "(local-only) " : ""}is NOT merged in (#{ahead_behind_string ahead, behind})"
-        show_commits ahead unless $short
+		if $short
+			last = recent_commit ahead, head
+			last = "#{last} "
+		end
+        puts "#{widget false, remote_only, local_only} #{name} #{last}#{local_only ? "(local-only) " : ""}is NOT merged in (#{ahead_behind_string ahead, behind})"
+		if ! $short
+        	show_commits ahead
+        end
       end
     end
   else
