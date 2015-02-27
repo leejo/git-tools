@@ -1,0 +1,16 @@
+#!/bin/bash
+
+git checkout -b gh-pages
+cd ../
+if [ ! -d 'reveal.js' ]; then
+	git clone https://github.com/hakimel/reveal.js.git
+fi
+cd -
+rm index.html
+revealup export html presentation.md  --output index.html --theme night
+perl -pli.bak -e 's/(?<!head)\.min\././' index.html
+rm index.html.bak
+mkdir revealjs
+cd ../reveal.js/
+git archive master | tar -x -C ${OLDPWD}/revealjs
+cd -
