@@ -7,7 +7,7 @@ if [ ! -d 'reveal.js' ]; then
 fi
 cd -
 rm index.html
-revealup export html presentation.md  --output index.html --theme night
+revealup export html presentation.md  --output index.html --theme night --transition none
 perl -pli.bak -e 's/(?<!head)\.min\././' index.html
 rm index.html.bak
 mkdir revealjs
