@@ -11,16 +11,19 @@ show_git_timesheet () {
         dir=${repo%.git}
         repo=$(expr "$repo" : '.*/\(.*\)/')
         cd $dir;
-        echo --- $repo ----;
         if [ "$week" == "week" ]; then
 			args=$(echo $args | sed 's/week//');
-            git timesheetweek $args
+            work=$(git timesheetweek $args)
         elif [ "$week" == "we" ]; then
 			args=$(echo $args | sed 's/we//');
-            git timesheetwe $args
+            work=$(git timesheetwe $args)
         else
-            git timesheet $args
+            work="$(git timesheet)"
         fi
+		if [ "$work" != "" ]; then
+	        echo --- $repo ----;
+			echo "$work"
+		fi
     done;
 }
 
