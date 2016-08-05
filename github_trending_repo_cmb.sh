@@ -11,9 +11,12 @@ temp_dir=/tmp
 github_url="https://github.com"
 trending_url="/trending?since="
 trending_class="repo-list-name"
-commit_measurer="/Users/leejohnson/working/code/git_tools/git-mean-commit-message-bytes"
+commit_measurer=$(dirname "$0")"/git-mean-commit-message-bytes"
 how_many_commits=200
 trending_since="monthly"
+
+echo $commit_measurer;
+exit;
 
 for repo in $(\
 	curl "$github_url$trending_url$trending_since" 2>/dev/null \

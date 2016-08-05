@@ -21,10 +21,11 @@ show_git_timesheet () {
             work="$(git timesheet)"
         fi
 		if [ "$work" != "" ]; then
+			echo "";
 	        echo --- $repo ----;
 			echo "$work"
 		fi
     done;
 }
 
-show_git_timesheet '/Users/leejohnson/working/';
+show_git_timesheet "$HOME/working/";
