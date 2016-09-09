@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git log --numstat --no-merges --pretty=format:%an | \
+git log --numstat --no-merges --pretty=format:%an $1 | \
 	awk ' 
 		author == "" { author = $0; next } /^$/ { author = ""; next }
 		{ added[author] += $1; removed[author] += $2 }
