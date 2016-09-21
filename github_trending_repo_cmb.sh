@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+#set -x
 set -e
 set -u 
 
@@ -11,7 +11,11 @@ temp_dir=/tmp
 github_url="https://github.com"
 trending_url="/trending?since="
 trending_class="repo-list-name"
-commit_measurer=$(dirname "$0")"/git-mean-commit-message-bytes"
+dirname=$(dirname "$0");
+if [ "$dirname" == "." ]; then
+	dirname=$(pwd);
+fi
+commit_measurer="$dirname/git-mean-commit-message-bytes"
 how_many_commits=200
 trending_since="monthly"
 
