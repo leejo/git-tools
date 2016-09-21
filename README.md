@@ -45,3 +45,9 @@ creates a gh-pages branch for easy upload to github pages
 
 shows you work done in ~/working for past day (default) or weekend (pass "we")
 or week (pass "week")
+
+## vimrc_split_commit_message_with_diff
+
+a little bit of vim config that will split the diff of what you are
+committing with the commit message in your editor (vim, obviously) so
+you can remind yourself of the change(s) to write a better commit message
