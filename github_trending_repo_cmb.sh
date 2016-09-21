@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#set -x
+set -x
 set -e
 set -u 
 
@@ -14,9 +14,6 @@ trending_class="repo-list-name"
 commit_measurer=$(dirname "$0")"/git-mean-commit-message-bytes"
 how_many_commits=200
 trending_since="monthly"
-
-echo $commit_measurer;
-exit;
 
 for repo in $(\
 	curl "$github_url$trending_url$trending_since" 2>/dev/null \
