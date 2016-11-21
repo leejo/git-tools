@@ -1,0 +1,91 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use feature qw/ say /;
+
+chomp( my @branches
+    = qx/git show -s --pretty='%cn|%ci %D' \$(git rev-parse --branches --remotes)/
+);
+
+my %branches_for;
+
+for my $branch (@branches) {
+    my ( $author, $branch_info ) = split /\|/ => $branch, 2;
+    push @{ $branches_for{$author} //= [] } => $branch_info;
+}
+
+my @authors = sort keys %branches_for;
+
+my $author;
+do {
+    my $current = 1;
+    foreach (@authors) {
+        say "[$current] $_";
+        $current++;
+    }
+    $current--;
+    print "Choose an author ('q' to quit): ";
+    chomp( my $response = <STDIN> );
+    if ( $response =~ /^([0-9]+)$/ ) {
+        if ( $response < 1 || $response > $current ) {
+            say "Response '$response' is out of range";
+        }
+        else {
+            $author = $authors[ $response - 1 ];
+        }
+    }
+    elsif ( $response =~ /^\s*[qQ]/ ) {
+        exit;
+    }
+    else {
+        say "Please enter an integer from 1 to $current";
+    }
+} while not $author;
+
+my $branches = $branches_for{$author};
+
+# due to iso date format, we sort on dates for free
+foreach my $branch (sort @$branches) {
+    say $branch;
+}
+
+__END__
+
+=head1 NAME
+
+branch-authors
+
+=head1 SYNOPSIS
+
+    perl bin/branch-authors
+
+=head1 DESCRIPTION
+
+Prints a list of branch authors and prompts you to choose one. Once chosen,
+displays a list of all branches believed to be pushed by them, along with the
+date. This should allow you to easily track down your remote branches and
+remove them after they've been merged.
+
+The syntax for deleting a remote branch is:
+
+git push origin :branchname
+
+Note that there is a space after C<origin>. This does not delete your local copy.
+
+See also: http://gitready.com/beginner/2009/02/02/push-and-delete-branches.html
+
+=head1 BRANCH DETECTIONS
+
+Currently we guess that the name on the last commit is the person responsible
+for a given branch. It's up to them to verify that a branch may be safely
+deleted.
+
+=head1 REQUIREMENTS
+
+perl 5.10.1+
+git 2.2+
+
+=head1 AUTHOR
+
+Ovid - see http://blogs.perl.org/users/ovid/2016/11/easily-clean-up-a-teams-remote-git-branches.html

@@ -36,6 +36,15 @@ show state of branches: merged, not merged, local, remote
 grabs the trending repos from github and then runs prints out the mean commit
 bytes for each, so you can see how poor most people's commit messages are
 
+## git-branch-authors
+
+Prints a list of branch authors and prompts you to choose one. Once chosen,
+displays a list of all branches believed to be pushed by them, along with the
+date. This should allow you to easily track down your remote branches and
+remove them after they've been merged.
+
+Script by Ovid, see http://blogs.perl.org/users/ovid/2016/11/easily-clean-up-a-teams-remote-git-branches.html
+
 ## reveal_gh-pages
 
 exports a markdown reveal.js presentation to a static ("static") site and
