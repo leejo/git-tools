@@ -1,0 +1,11 @@
+"
+" add to your .vimrc: split commit message editing with the diff
+"
+if match( bufname(1),'COMMIT_EDITMSG' ) != -1
+        :silent !git diff --cached >/tmp/commit.diff
+        :silent :vsplit /tmp/commit.diff
+        :wincmd l
+        :wincmd H
+        :set spell
+        :set ft=gitcommit
+endif

@@ -27,4 +27,4 @@ show_git_timesheet () {
 }
 
 tidy=$1
-show_git_timesheet '/Users/leejohnson/working/' $tidy;
+show_git_timesheet "$HOME/working/" $tidy;

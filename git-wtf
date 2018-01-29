@@ -43,7 +43,6 @@ If [branch] is not specified, git-wtf will use the current branch. The possible
   -B, --all-branches  show all branches, not just those matching match list in config
   -s, --short         don't show commits, but will show last commit date
   -k, --key           show key
-  -r, --relations     show relation to features / integration branches
       --dump-config   print out current configuration and exit
 
 git-wtf uses some heuristics to determine which branches are integration
@@ -95,7 +94,7 @@ $all_commits = ARGV.delete("--all-commits") || ARGV.delete("-A")
 $all_branches = ARGV.delete("--all-branches" ) || ARGV.delete("-B")
 $dump_config = ARGV.delete("--dump-config")
 $key = ARGV.delete("--key") || ARGV.delete("-k")
-$show_relations = ARGV.delete("--relations") || ARGV.delete("-r")
+$show_relations = true
 ARGV.each { |a| abort "Error: unknown argument #{a}." if a =~ /^--/ }
 
 ## search up the path for a file
@@ -103,9 +102,12 @@ def find_file fn
   while true
     return fn if File.exist? fn
     fn2 = File.join("..", fn)
-    return nil if File.expand_path(fn2) == File.expand_path(fn)
+    break if File.expand_path(fn2) == File.expand_path(fn)
     fn = fn2
   end
+  ## not found relative to local path, assume in homedir
+  fn = File.join( '/',Dir.home,".git-wtfrc" )
+  return fn
 end
 
 want_color = `git config color.wtf`

@@ -28,4 +28,4 @@ show_git_timesheet () {
     done;
 }
 
-show_git_timesheet '/Users/leejohnson/working/';
+show_git_timesheet "$HOME/working/";
