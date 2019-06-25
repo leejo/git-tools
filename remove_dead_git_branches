@@ -1,0 +1,3 @@
+#!/bin/bash
+
+for br in $(git br | grep gone | awk '{print $1}'); do git br -D $br; done
