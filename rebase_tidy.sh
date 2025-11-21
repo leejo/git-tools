@@ -46,7 +46,12 @@ tidy() {
             has_perl=$( file -b -n $source_file | grep -c 'Perl' );
             if [ $has_perl -eq "1" ]; then
                 perltidy $source_file;
-                mv $source_file.tdy $source_file;
+                if [ -e "$source_file.ERR" ]; then
+                    echo "ERROR applying tidy to $source_file, aborting"
+                    exit;
+                else
+                    mv $source_file.tdy $source_file;
+                fi
             fi
         fi
     done
