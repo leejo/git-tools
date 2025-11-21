@@ -45,6 +45,10 @@ remove them after they've been merged.
 
 Script by Ovid, see http://blogs.perl.org/users/ovid/2016/11/easily-clean-up-a-teams-remote-git-branches.html
 
+## rebase_tidy.sh
+
+Run a rebase and apply perltidy on the commits as part of the rebase - see comments in the script for detail
+
 ## reveal_gh-pages
 
 exports a markdown reveal.js presentation to a static ("static") site and
