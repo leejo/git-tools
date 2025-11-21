@@ -19,6 +19,13 @@
 #          git rebase -i $sha^1 -X theirs --exec ../rebase_tidy.sh || break;
 #   done
 #
+# you could also just use the "theirs" strategy, in the simple case,
+# however that might cause more churn as you're not walking the tidy
+# backwards; that means the tidied deltas get untidied (and thus
+# tidied in the *next* commit: churn):
+#
+#   git rebase -i $sha -X theirs --exec ./rebase_tidy.sh
+#
 
 # determine the commit currently being applied - rebase should
 # set $GIT_COMMIT otherwise we need to figure it out
